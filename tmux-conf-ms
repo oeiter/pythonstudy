@@ -1,0 +1,76 @@
+#http://wiki.ms.com/FSF/Tmux
+# change prefix key to C-a like screen and also C-a-a to send it into
+# a session within a session
+#https://gist.github.com/ryin/3109651
+#https://github.com/remiprev/tmuxfiles/blob/master/.tmux.conf
+#https://raw.githubusercontent.com/chinghanho/.dotfiles/master/.tmux.conf
+#http://snippets.aktagon.com/snippets/553-tmux-default-key-bindings
+#set -g default-terminal "xterm"
+#set -g default-terminal "screen-256color"
+
+set-window-option -g xterm-keys on
+
+setw -g mode-keys vi
+#setw -g mode-mouse on
+setw -g monitor-activity on
+
+# Automatically set window title
+set-window-option -g automatic-rename on
+set-option -g set-titles on
+
+# remap PREFIX to C-a
+set -g prefix C-a
+
+# send C-a
+bind C-a send-prefix
+
+# Reload the file with Prefix r
+bind r source-file ~/.tmux.conf \; display "Configuration Reloaded!!"
+
+bind-key C-a last-window
+bind-key K confirm-before -p "kill-window #W? (y/n)" kill-window
+bind-key X confirm-before -p "kill-pane #P? (y/n)" kill-pane
+
+bind A command-prompt "rename-window %%"
+bind-key | split-window -h
+bind-key S split-window -v
+set -g mouse-select-pane off
+set -g history-limit 5000
+# change default delay
+set -sg escape-time 0
+set -g base-index 1
+set -g pane-base-index 1
+
+# Use Alt-arrow keys without prefix key to switch panes
+bind -n M-Left select-pane -L
+bind -n M-Right select-pane -R
+bind -n M-Up select-pane -U
+bind -n M-Down select-pane -D
+
+bind-key -r M-Up resize-pane -U 1
+bind-key -r M-Down resize-pane -D 1
+bind-key -r M-Left resize-pane -L 1
+bind-key -r M-Right resize-pane -R 1
+
+# Shift arrow to switch windows
+bind -n S-Left  previous-window
+bind -n S-Right next-window
+
+# THEME
+set -g status-bg black
+set -g status-fg white
+set -g window-status-current-bg white
+set -g window-status-current-fg black
+set -g window-status-current-attr bold
+set -g status-interval 5
+set -g status-left-length 30
+#set -g status-right-length 300
+set -g status-left ''
+#set -g status-right '#(whoami) #[fg=yellow]%m-%d %H:%M:%S'
+#http://linux.about.com/od/commands/l/blcmdl1_date.htm
+set -g status-right '#[fg=yellow]%T %A %F[%j]'
+
+# set the color of the window list
+setw -g window-status-fg cyan
+setw -g window-status-bg default
+setw -g window-status-attr dim
